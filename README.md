@@ -1,5 +1,11 @@
 # NestJS 2022
 
+## Dev
+
+```bash
+cp .env.sample .env
+```
+
 ## A.Core
 
 - [01](./docs/01.md)
