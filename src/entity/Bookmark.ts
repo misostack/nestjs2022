@@ -1,6 +1,7 @@
-import { AbstractEntity } from 'src/shared/abstract-entity';
+import { AbstractEntity } from '../shared/AbstractEntity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { BookmarkGroup } from './BookmarkGroup';
+
+import { BookmarkGroup } from './bookmark-group';
 
 @Entity()
 export class Bookmark extends AbstractEntity {

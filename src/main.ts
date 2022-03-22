@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // STATIC ASSETS
+  console.error(__dirname);
   app.useStaticAssets(join(__dirname, '..', 'public'));
   // VIEW ENGINES
   app.setViewEngine('ejs');

@@ -1,22 +1,19 @@
 import 'dotenv/config';
 
-export interface DatabaseConfigValues {
-  main: {
-    url: string;
-  };
-  secondary: {
-    url: string;
-  };
-}
 export class Configuration {
-  static getDatabaseConfigValues(): DatabaseConfigValues {
+  static getMainDatabaseConfiguration(dirname): any {
     return {
-      main: {
-        url: process.env.MYSQL_DB_URL,
+      type: 'mysql',
+      url: process.env.MYSQL_DB_URL,
+      entities: [dirname + '/entity/*{.js,.ts}'],
+      // must not be synchronize automaticall, use data migration instea
+      synchronize: false,
+      // migrations
+      migrations: [dirname + '/database/migrations/*.ts'],
+      cli: {
+        migrationsDir: dirname + '/database/migrations',
       },
-      secondary: {
-        url: process.env.MYSQL_DB_URL,
-      },
+      // clis
     };
   }
 }

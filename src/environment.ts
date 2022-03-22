@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-abstract class Environment {
+class Environment {
   public static getPort(): number {
     return parseInt(process.env.PORT || '3000');
   }

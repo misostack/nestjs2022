@@ -1,13 +1,22 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
+
+import { BookmarkService } from './services/bookmark-service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private bookmarkService: BookmarkService) {
+    // test collection
+    this.bookmarkService.findAllBookmarkGroups().then((groups) => {
+      console.error(groups.map((g) => `${g.id} : ${g.title}`));
+    });
+  }
 
   @Get('')
   @Render('index')
   index() {
-    return { hello: this.appService.getHello() };
+    this.bookmarkService.findAllBookmarkGroups().then((groups) => {
+      console.error(groups.map((g) => `${g.id} : ${g.title}`));
+    });
+    return { hello: 'this.appService.getHello()' };
   }
 }
