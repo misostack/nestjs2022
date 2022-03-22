@@ -6,9 +6,27 @@
 cp .env.sample .env
 ```
 
+## Debug
+
+```bash
+yarn start:debug
+# run vscode debug
+
+```
+
 ## A.Core
 
-- [01](./docs/01.md)
+- [ ] MVC: Modal, View, Controller, Database Connection
+- [ ] 1st build on Heroku
+- [ ] 1st build on Vultr
+- [ ] Providers
+- [ ] Modules
+- [ ] Middleware
+- [ ] Exceptions
+- [ ] Pipes
+- [ ] Guards
+- [ ] Interceptors
+- [ ] Custom Decorators
 
 ## B. Built-in Tools
 
