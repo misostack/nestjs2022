@@ -14,19 +14,14 @@ yarn start:debug
 
 ```
 
-## A.Core
+# A.Core
 
-- [ ] MVC: Modal, View, Controller, Database Connection
-- [ ] 1st build on Heroku
-- [ ] 1st build on Vultr
-- [ ] Providers
-- [ ] Modules
-- [ ] Middleware
-- [ ] Exceptions
-- [ ] Pipes
-- [ ] Guards
-- [ ] Interceptors
-- [ ] Custom Decorators
+- MVC: Database Connection, Model, Controller, View
+  **Start DB**
+
+```bash
+docker-compose up -d
+```
 
 ## B. Built-in Tools
 

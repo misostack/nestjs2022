@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:    
+  db:
+    image: mysql:8.0.28
+    restart: always
+    ports:
+      - '3306:3306'    
+    volumes:
+      - nestjs_mysql:/var/lib/mysql
+    env_file:
+      - './.env'
+    networks:
+      - jsguru
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: db
+    env_file:
+       - './.env' 
+    networks:
+      - jsguru  
+networks:
+  jsguru:
+volumes:
+  nestjs_mysql: {} 
