@@ -4,6 +4,17 @@
 
 ```bash
 cp .env.sample .env
+yarn typeorm migration:show
+yarn typeorm migration:run
+```
+
+### Migration commands
+
+```bash
+yarn typeorm migration:show
+yarn typeorm migration:generate -n AnyName
+yarn typeorm migration:run
+yarn typeorm migration:revert
 ```
 
 ## Debug
@@ -11,7 +22,6 @@ cp .env.sample .env
 ```bash
 yarn start:debug
 # run vscode debug
-
 ```
 
 # A.Core
@@ -22,6 +32,11 @@ yarn start:debug
 ```bash
 docker-compose up -d
 ```
+
+- [x] Database Connection
+- [ ] Model : Insert
+- [ ] Controller
+- [ ] View
 
 ## B. Built-in Tools
 

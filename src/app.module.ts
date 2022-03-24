@@ -5,7 +5,9 @@ import { AppController } from './app.controller';
 import { Configuration } from './configuration/configuration';
 import { Bookmark } from './entity/bookmark';
 import { BookmarkGroup } from './entity/bookmark-group';
-import { BookmarkService } from './services/bookmark-service';
+import { BookmarkGroupService } from './services/bookmark-group-service';
+import { BookmarkController } from './controllers/bookmark/bookmark.controller';
+import { BookmarkGroupController } from './controllers/bookmark-group/bookmark-group.controller';
 
 console.error(Configuration.getMainDatabaseConfiguration(__dirname));
 
@@ -19,8 +21,8 @@ console.error(Configuration.getMainDatabaseConfiguration(__dirname));
     // registered entities
     TypeOrmModule.forFeature([Bookmark, BookmarkGroup]),
   ],
-  controllers: [AppController],
-  providers: [BookmarkService],
+  controllers: [AppController, BookmarkController, BookmarkGroupController],
+  providers: [BookmarkGroupService],
 })
 export class AppModule {
   constructor(private connection: Connection) {
