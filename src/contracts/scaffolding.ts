@@ -26,9 +26,9 @@ export type Criteria = {
   value: string | number | boolean | Array<string | number>;
 };
 
-export interface BaseService<T> {
-  create<M>(payload: M): Promise<T>;
-  createEach(payload: Array<Partial<T>>): Promise<Array<T>>;
+export interface BaseService<T, CreateDTO, CreateBatchDTO> {
+  create(payload: CreateDTO): Promise<T>;
+  createEach(payload: CreateBatchDTO): Promise<Array<T>>;
   find(options: ScaffoldingFindOptions): Promise<Array<T>>;
   findOne(id: ID): Promise<T>;
   updateOne(criteria: { id: ID }, payload: Partial<T>): Promise<T>;

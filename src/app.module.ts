@@ -17,6 +17,8 @@ console.error(Configuration.getMainDatabaseConfiguration(__dirname));
     TypeOrmModule.forRoot({
       ...Configuration.getMainDatabaseConfiguration(__dirname),
       autoLoadEntities: true,
+      // logging: true,
+      logging: ['query', 'error'],
     }),
     // registered entities
     TypeOrmModule.forFeature([Bookmark, BookmarkGroup]),

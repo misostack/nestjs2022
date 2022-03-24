@@ -7,18 +7,21 @@ import {
   ID,
   ScaffoldingFindOptions,
 } from 'src/contracts/scaffolding';
-import { instanceToPlain } from 'class-transformer';
+import {
+  BookmarkGroupBatchDTO,
+  BookmarkGroupCreateDTO,
+} from 'src/dtos/bookmark-group.dto';
 
 // global
 @Injectable()
-export class BookmarkGroupService implements BaseService<BookmarkGroup> {
+export class BookmarkGroupService
+  implements
+    BaseService<BookmarkGroup, BookmarkGroupCreateDTO, BookmarkGroupBatchDTO>
+{
   constructor(
     @InjectRepository(BookmarkGroup)
     private bookmarkGroupRepository: Repository<BookmarkGroup>,
   ) {}
-  createEach(payload: Partial<BookmarkGroup>[]): Promise<BookmarkGroup[]> {
-    throw new Error('Method not implemented.');
-  }
   find(options: ScaffoldingFindOptions): Promise<BookmarkGroup[]> {
     throw new Error('Method not implemented.');
   }
@@ -34,10 +37,11 @@ export class BookmarkGroupService implements BaseService<BookmarkGroup> {
   destroyOne(criteria: { id: ID }) {
     throw new Error('Method not implemented.');
   }
-  create<T>(payload: T): Promise<BookmarkGroup> {
-    const entity = this.bookmarkGroupRepository.create({
-      ...instanceToPlain(payload),
-    });
-    return this.bookmarkGroupRepository.save(entity);
+  create(payload: BookmarkGroupCreateDTO): Promise<BookmarkGroup> {
+    return this.bookmarkGroupRepository.save(payload);
+  }
+  createEach(payload: BookmarkGroupBatchDTO): Promise<BookmarkGroup[]> {
+    const { items } = payload;
+    return this.bookmarkGroupRepository.save(items);
   }
 }

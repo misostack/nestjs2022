@@ -1,4 +1,4 @@
-import { AbstractEntity } from '../shared/AbstractEntity';
+import { AbstractEntity } from 'src/shared/abstract-entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 import { BookmarkGroup } from './bookmark-group';
