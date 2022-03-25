@@ -5,7 +5,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { getRepository } from 'typeorm';
+import { Equal, getRepository, Not } from 'typeorm';
 
 @ValidatorConstraint({ async: true, name: 'IsUnique' })
 export class EntityExistsConstraint implements ValidatorConstraintInterface {
@@ -19,12 +19,18 @@ export class EntityExistsConstraint implements ValidatorConstraintInterface {
     validationArguments?: ValidationArguments,
   ): Promise<boolean> | boolean {
     const [entity] = validationArguments.constraints;
+    const object = validationArguments.object as any;
     const property = validationArguments.property;
     const criteria = {};
-    criteria[`${property}`] = value;
+    criteria[`${property}`] = Equal(value);
+    if (object) {
+      criteria['id'] = Not(object?.id);
+    }
     // findOne with LIMIT 1 perfect for query optimization
     return getRepository(entity)
-      .findOne(criteria)
+      .findOne({
+        where: criteria,
+      })
       .then((v) => {
         return !v;
       });

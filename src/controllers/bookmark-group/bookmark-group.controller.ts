@@ -1,8 +1,10 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  BookmarkGroupBatchDTO,
+  BookmarkGroupCreateBatchDTO,
   BookmarkGroupCreateDTO,
+  BookmarkGroupUpdateBatchDTO,
+  BookmarkGroupUpdateBatchResponse,
 } from 'src/dtos/bookmark-group.dto';
 import { BookmarkGroup } from 'src/entity/bookmark-group';
 
@@ -16,16 +18,16 @@ export class BookmarkGroupController {
   @Post()
   @ApiOperation({ summary: 'Create bookmark group' })
   @ApiResponse(ResponseFactory.badRequestResponseFormat())
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.CREATED,
     description: 'The new record',
     type: BookmarkGroup,
   })
   create(@Body() payload: BookmarkGroupCreateDTO): Promise<BookmarkGroup> {
     return this.bookmarkGroupService.create(payload);
   }
-  @Patch()
+  @Post('/batch')
   @ApiOperation({ summary: 'Create batch of bookmark groups' })
   @ApiResponse(ResponseFactory.badRequestResponseBatchFormat())
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -34,8 +36,21 @@ export class BookmarkGroupController {
     isArray: true,
   })
   createBatch(
-    @Body() payload: BookmarkGroupBatchDTO,
+    @Body() payload: BookmarkGroupCreateBatchDTO,
   ): Promise<Array<BookmarkGroup>> {
     return this.bookmarkGroupService.createEach(payload);
+  }
+  @Patch('/batch')
+  @ApiOperation({ summary: 'Update batch of bookmark groups' })
+  @ApiResponse(ResponseFactory.badRequestResponseBatchFormat())
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @ApiResponse({
+    status: 200,
+    type: BookmarkGroupUpdateBatchResponse,
+  })
+  updateBatch(
+    @Body() payload: BookmarkGroupUpdateBatchDTO,
+  ): Promise<BookmarkGroupUpdateBatchResponse> {
+    return this.bookmarkGroupService.updateEach(payload);
   }
 }

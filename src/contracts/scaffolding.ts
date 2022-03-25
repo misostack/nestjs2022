@@ -26,11 +26,22 @@ export type Criteria = {
   value: string | number | boolean | Array<string | number>;
 };
 
-export interface BaseService<T, CreateDTO, CreateBatchDTO> {
+export interface BaseService<
+  T,
+  CreateDTO,
+  CreateBatchDTO,
+  UpdateDTO,
+  UpdateBatchDTO,
+  // UpdateBulkDTO,
+> {
   create(payload: CreateDTO): Promise<T>;
   createEach(payload: CreateBatchDTO): Promise<Array<T>>;
   find(options: ScaffoldingFindOptions): Promise<Array<T>>;
   findOne(id: ID): Promise<T>;
-  updateOne(criteria: { id: ID }, payload: Partial<T>): Promise<T>;
-  destroyOne(criteria: { id: ID });
+  updateOne(id: ID, payload: UpdateDTO): Promise<boolean>;
+  updateEach(
+    payload: UpdateBatchDTO,
+  ): Promise<{ items: Array<{ [key: string]: boolean }> }>;
+  // updateBulk(payload: UpdateBulkDTO): Promise<boolean>;
+  destroyOne(id: ID): Promise<boolean>;
 }
