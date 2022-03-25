@@ -38,7 +38,7 @@ export interface BaseService<
   createEach(payload: CreateBatchDTO): Promise<Array<T>>;
   find(options: ScaffoldingFindOptions): Promise<Array<T>>;
   findOne(id: ID): Promise<T>;
-  updateOne(id: ID, payload: UpdateDTO): Promise<boolean>;
+  updateOne(id: ID, payload: UpdateDTO): Promise<T>;
   updateEach(
     payload: UpdateBatchDTO,
   ): Promise<{ items: Array<{ [key: string]: boolean }> }>;

@@ -1,4 +1,8 @@
-import { BadRequestException, HttpStatus } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 class BadRequestResponse {
@@ -78,5 +82,13 @@ export class ResponseFactory {
       description: 'Bad Request.',
       type: BadRequestResponseBatch,
     };
+  }
+
+  static notFound(message: string) {
+    // throw new BadRequestException(errors);
+    throw new NotFoundException({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: message,
+    });
   }
 }

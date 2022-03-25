@@ -14,6 +14,7 @@ import {
   BookmarkGroupUpdateBatchResponse,
   BookmarkGroupUpdateDTO,
 } from 'src/dtos/bookmark-group.dto';
+import { EntityFactory } from 'src/shared/entity-factory';
 
 // global
 @Injectable()
@@ -39,11 +40,22 @@ export class BookmarkGroupService
     const { items } = payload;
     return this.bookmarkGroupRepository.save(items);
   }
-  updateOne(id: ID, payload: BookmarkGroupUpdateDTO): Promise<boolean> {
+  async updateOne(
+    id: ID,
+    payload: BookmarkGroupUpdateDTO,
+  ): Promise<BookmarkGroup> {
+    // find then update
+    const entity = await EntityFactory.findEntity<BookmarkGroup>(
+      BookmarkGroup,
+      id,
+    );
     return new Promise((resolve, reject) => {
       this.bookmarkGroupRepository.update(id, payload).then(
         () => {
-          resolve(true);
+          resolve({
+            ...entity,
+            ...payload,
+          });
         },
         (error) => reject(error),
       );
@@ -55,12 +67,14 @@ export class BookmarkGroupService
     const items = [];
     for (const item of payload.items) {
       const { id, ...data } = item;
-      const updateStatus = {};
+      const updateStatus = {
+        id,
+      };
       try {
         await this.bookmarkGroupRepository.update(id, data);
-        updateStatus[id] = true;
+        updateStatus['success'] = true;
       } catch (error) {
-        updateStatus[id] = false;
+        updateStatus['success'] = false;
       }
       items.push(updateStatus);
     }

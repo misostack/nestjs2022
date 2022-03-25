@@ -23,7 +23,7 @@ export class EntityExistsConstraint implements ValidatorConstraintInterface {
     const property = validationArguments.property;
     const criteria = {};
     criteria[`${property}`] = Equal(value);
-    if (object) {
+    if (object && object.id) {
       criteria['id'] = Not(object?.id);
     }
     // findOne with LIMIT 1 perfect for query optimization

@@ -3,18 +3,18 @@ import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   ValidateNested,
 } from 'class-validator';
-import { BookmarkGroup } from 'src/entity/bookmark-group';
+import { BookmarkGroup, BookmarkGroupStatus } from 'src/entity/bookmark-group';
 import { IsUnique } from 'src/shared/validators';
 export class BookmarkGroupCreateDTO {
   @ApiProperty({
     example: 'Technical',
     description: `The bookmark group\'s name`,
   })
-  @IsUnique(BookmarkGroup)
   @IsNotEmpty()
   title: string;
 }
@@ -32,6 +32,13 @@ export class BookmarkGroupUpdateBatchItemDTO {
   @IsUnique(BookmarkGroup)
   @IsNotEmpty()
   title: string;
+
+  @ApiProperty({
+    example: BookmarkGroupStatus.ACTIVE,
+    description: `The bookmark group\'s status`,
+  })
+  @IsEnum(BookmarkGroupStatus)
+  status: BookmarkGroupStatus;
 }
 
 export class BookmarkGroupCreateBatchDTO {
@@ -48,13 +55,20 @@ export class BookmarkGroupCreateBatchDTO {
 
 export class BookmarkGroupUpdateDTO extends PartialType(
   BookmarkGroupCreateDTO,
-) {}
+) {
+  @ApiProperty({
+    example: BookmarkGroupStatus.ACTIVE,
+    description: `The bookmark group\'s status`,
+  })
+  @IsEnum(BookmarkGroupStatus)
+  status: BookmarkGroupStatus;
+}
 
 export class BookmarkGroupUpdateBatchDTO {
   @ApiProperty({
     example: [
-      { id: 1, title: 'Technical' },
-      { id: 2, title: 'Marketing' },
+      { id: 1, title: 'Technical', status: true },
+      { id: 2, title: 'Marketing', status: false },
     ],
     description: 'Update list of bookmarks',
   })
@@ -68,8 +82,8 @@ export class BookmarkGroupUpdateBatchDTO {
 export class BookmarkGroupUpdateBatchResponse {
   @ApiProperty({
     example: [
-      { id: 1, status: true },
-      { id: 2, status: true },
+      { id: 1, success: true },
+      { id: 2, success: true },
     ],
     description: 'Update list of bookmarks status',
   })

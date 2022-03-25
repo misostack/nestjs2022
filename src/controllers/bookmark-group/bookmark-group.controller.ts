@@ -1,10 +1,19 @@
-import { Body, Controller, HttpStatus, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   BookmarkGroupCreateBatchDTO,
   BookmarkGroupCreateDTO,
   BookmarkGroupUpdateBatchDTO,
   BookmarkGroupUpdateBatchResponse,
+  BookmarkGroupUpdateDTO,
 } from 'src/dtos/bookmark-group.dto';
 import { BookmarkGroup } from 'src/entity/bookmark-group';
 
@@ -15,6 +24,13 @@ import { ResponseFactory } from 'src/shared/response-factory';
 @Controller('bookmark-groups')
 export class BookmarkGroupController {
   constructor(private bookmarkGroupService: BookmarkGroupService) {}
+  /**
+   * Create bookmark Action
+   *
+   * @param {BookmarkGroupCreateDTO} payload
+   * @returns {Promise<BookmarkGroup>}
+   * @memberof BookmarkGroupController
+   */
   @Post()
   @ApiOperation({ summary: 'Create bookmark group' })
   @ApiResponse(ResponseFactory.badRequestResponseFormat())
@@ -27,6 +43,23 @@ export class BookmarkGroupController {
   create(@Body() payload: BookmarkGroupCreateDTO): Promise<BookmarkGroup> {
     return this.bookmarkGroupService.create(payload);
   }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update bookmark group' })
+  @ApiResponse(ResponseFactory.badRequestResponseFormat())
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Forbidden.' })
+  @ApiResponse({
+    description: 'Update success',
+    type: BookmarkGroup,
+  })
+  updateOne(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body()
+    payload: BookmarkGroupUpdateDTO,
+  ): Promise<BookmarkGroup> {
+    return this.bookmarkGroupService.updateOne(id, payload);
+  }
+
   @Post('/batch')
   @ApiOperation({ summary: 'Create batch of bookmark groups' })
   @ApiResponse(ResponseFactory.badRequestResponseBatchFormat())
