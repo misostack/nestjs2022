@@ -1,4 +1,9 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Render,
+} from '@nestjs/common';
 
 import { BookmarkGroupService } from './services/bookmark-group-service';
 
@@ -9,6 +14,7 @@ export class AppController {
   @Get('')
   @Render('index')
   index() {
+    throw new InternalServerErrorException('interal server error');
     return { hello: 'this.appService.getHello()' };
   }
 }

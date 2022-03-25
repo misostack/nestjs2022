@@ -8,6 +8,8 @@ import { BookmarkGroup } from './entity/bookmark-group';
 import { BookmarkGroupService } from './services/bookmark-group-service';
 import { BookmarkController } from './controllers/bookmark/bookmark.controller';
 import { BookmarkGroupController } from './controllers/bookmark-group/bookmark-group.controller';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 console.error(Configuration.getMainDatabaseConfiguration(__dirname));
 
@@ -24,7 +26,13 @@ console.error(Configuration.getMainDatabaseConfiguration(__dirname));
     TypeOrmModule.forFeature([Bookmark, BookmarkGroup]),
   ],
   controllers: [AppController, BookmarkController, BookmarkGroupController],
-  providers: [BookmarkGroupService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    BookmarkGroupService,
+  ],
 })
 export class AppModule {
   constructor(private connection: Connection) {
