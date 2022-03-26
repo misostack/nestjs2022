@@ -1,13 +1,17 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/decorators/auth.decorator';
 import {
   BookmarkGroupCreateBatchDTO,
   BookmarkGroupCreateDTO,
@@ -16,6 +20,8 @@ import {
   BookmarkGroupUpdateDTO,
 } from 'src/dtos/bookmark-group.dto';
 import { BookmarkGroup } from 'src/entity/bookmark-group';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 import { BookmarkGroupService } from 'src/services/bookmark-group-service';
 
@@ -55,5 +61,11 @@ export class BookmarkGroupController {
     @Body() payload: BookmarkGroupUpdateBatchDTO,
   ): Promise<BookmarkGroupUpdateBatchResponse> {
     return this.bookmarkGroupService.updateEach(payload);
+  }
+
+  @Auth('sadmin', 'member')
+  @Get(':id')
+  findOne(@Param('id', new ParseIntPipe()) id: number): Promise<BookmarkGroup> {
+    return this.bookmarkGroupService.findOne(id);
   }
 }
