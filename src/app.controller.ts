@@ -76,4 +76,12 @@ export class AppController {
   //   console.log(req.body);
   //   return true;
   // }
+
+  @Get('middlewares')
+  middlewares(@Req() req: Request) {
+    return {
+      HELLO: req['HELLO'],
+      EXAMPLE: req['EXAMPLE'],
+    };
+  }
 }

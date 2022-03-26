@@ -16,11 +16,12 @@ import { BookmarkGroupController } from './controllers/bookmark-group/bookmark-g
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { JsonBodyMiddleware } from './middlewares/json-body.middleware';
-import { MultipartBodyMiddleware } from './middlewares/multipart-body.middleware';
+import { SingleFileMiddleware } from './middlewares/multipart-body.middleware';
 import { RouteInfo } from '@nestjs/common/interfaces';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const multer = require('multer');
+import {
+  ExampleMiddleware,
+  helloMiddleware,
+} from './middlewares/example.middleware';
 
 const MultipartBodyParsingRoutes: Array<RouteInfo> = [
   {
@@ -56,12 +57,12 @@ export class AppModule implements NestModule {
     // test collection
   }
   public configure(consumer: MiddlewareConsumer) {
-    const upload = multer({
-      dest: './public/data/uploads/',
-    });
     // default is JSON
     consumer
-      .apply(upload.single('file'))
+      .apply(helloMiddleware, ExampleMiddleware)
+      .forRoutes('/examples/middlewares')
+      // single file upload
+      .apply(SingleFileMiddleware('file'))
       .forRoutes(...MultipartBodyParsingRoutes)
       .apply(JsonBodyMiddleware)
       .exclude(...MultipartBodyParsingRoutes)
