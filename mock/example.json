@@ -1,0 +1,13 @@
+{
+  "params": { "param1": "a" },
+  "filter": [
+    {
+      "status": "active",
+      "s": "son nguyen",
+      "created_at": { ">": "1603271110000" }
+    }
+  ],
+  "sort": [{ "email": "asc", "firstname": "desc" }],
+  "page": "1",
+  "size": "3"
+}

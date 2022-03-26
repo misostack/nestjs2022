@@ -8,7 +8,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from './pipes';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bodyParser: false,
+  });
 
   // STATIC ASSETS
   console.error(__dirname);
@@ -20,14 +22,17 @@ async function bootstrap() {
   );
 
   // API DOCs
-  const config = new DocumentBuilder()
-    .setTitle('JSGURU NestJS')
-    .setDescription('The JSUGRU API description')
-    .setVersion('1.0')
-    .addTag('bookmarks')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('JSGURU NestJS')
+      .setDescription('The JSUGRU API description')
+      .setVersion('1.0')
+      .addTag('bookmarks')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('explorer', app, document);
+  }
 
   // DATA VALIDATIONS
   app.useGlobalPipes(

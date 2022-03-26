@@ -64,6 +64,7 @@ export class BookmarkGroupController {
   }
 
   @Auth('sadmin', 'member')
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id', new ParseIntPipe()) id: number): Promise<BookmarkGroup> {
     return this.bookmarkGroupService.findOne(id);

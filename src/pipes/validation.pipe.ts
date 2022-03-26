@@ -47,6 +47,8 @@ export class ValidationPipe implements PipeTransform<any> {
     };
   }
   async transform(value: any, { metatype }: ArgumentMetadata) {
+    console.error({ value });
+    console.error({ metatype });
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
