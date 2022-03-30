@@ -8,7 +8,7 @@ import {
   IsNumber,
   ValidateNested,
 } from 'class-validator';
-import { BookmarkGroup, BookmarkGroupStatus } from 'src/entity/bookmark-group';
+import { BookmarkGroup, BookmarkGroupStatus } from 'src/entity/BookmarkGroup';
 import { IsUnique } from 'src/shared/validators';
 export class BookmarkGroupCreateDTO {
   @ApiProperty({

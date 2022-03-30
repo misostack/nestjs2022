@@ -1,4 +1,4 @@
-import { BookmarkGroup } from '../entity/bookmark-group';
+import { BookmarkGroup } from '../entity/BookmarkGroup';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

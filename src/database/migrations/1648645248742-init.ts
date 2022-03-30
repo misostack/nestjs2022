@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class init1648202444079 implements MigrationInterface {
-    name = 'init1648202444079'
+export class init1648645248742 implements MigrationInterface {
+    name = 'init1648645248742'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`bookmark_group\` (\`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`id\` int NOT NULL AUTO_INCREMENT, \`title\` varchar(75) NOT NULL, \`status\` enum ('0', '1') NULL DEFAULT '1', \`totalBookmarks\` int NULL DEFAULT '0', PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);

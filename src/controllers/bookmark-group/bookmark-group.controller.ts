@@ -19,7 +19,7 @@ import {
   BookmarkGroupUpdateBatchResponse,
   BookmarkGroupUpdateDTO,
 } from 'src/dtos/bookmark-group.dto';
-import { BookmarkGroup } from 'src/entity/bookmark-group';
+import { BookmarkGroup } from 'src/entity/BookmarkGroup';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 

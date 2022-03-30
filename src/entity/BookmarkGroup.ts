@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-import { Bookmark } from './bookmark';
+import { Bookmark } from './Bookmark';
 import { ApiProperty } from '@nestjs/swagger';
 import { AbstractEntity } from 'src/shared/abstract-entity';
 
