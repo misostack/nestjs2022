@@ -24,6 +24,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 
 import { BookmarkGroupService } from 'src/services/bookmark-group-service';
+import { ResponseFactory } from 'src/shared/response-factory';
 
 @ApiTags('bookmarks')
 @Controller('bookmark-groups')
@@ -63,10 +64,16 @@ export class BookmarkGroupController {
     return this.bookmarkGroupService.updateEach(payload);
   }
 
-  @Auth('sadmin', 'member')
+  @Auth('admin', 'member')
   @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', new ParseIntPipe()) id: number): Promise<BookmarkGroup> {
-    return this.bookmarkGroupService.findOne(id);
+  async findOne(
+    @Param('id', new ParseIntPipe()) id: number,
+  ): Promise<BookmarkGroup> {
+    const record = await this.bookmarkGroupService.findOne(id);
+    if (record) {
+      return record;
+    }
+    ResponseFactory.notFound();
   }
 }

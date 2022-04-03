@@ -60,9 +60,16 @@ class BadRequestResponseBatch {
 
 export class ResponseFactory {
   static badRequest(errors: Array<any>) {
-    throw new BadRequestException({ errors });
+    throw new BadRequestException({
+      message: 'BAD_REQUEST',
+      errors,
+      code: 'HttpStatus.BAD_REQUEST',
+    });
   }
-  static notFound(message: string) {
-    throw new NotFoundException(message);
+  static notFound(message: string = 'NOT_FOUND') {
+    throw new NotFoundException({
+      message,
+      code: 'HttpStatus.NOT_FOUND',
+    });
   }
 }

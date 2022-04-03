@@ -5,20 +5,57 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { HttpAdapterHost } from '@nestjs/core';
 
-@Catch(HttpException)
+@Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  catch(exception: unknown, host: ArgumentsHost) {
+    const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
-    console.error(exception);
-    response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-    });
+    const isProduction = process.env.NODE_ENV === 'production';
+    if (!(exception instanceof HttpException)) {
+      console.error(exception);
+      return httpAdapter.reply(
+        ctx.getResponse(),
+        {
+          message: isProduction
+            ? 'INTERNAL_SERVER_ERROR'
+            : (exception as Error).message + (exception as Error).stack,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    try {
+      const statusCode = (exception as HttpException).getStatus();
+      const res = (exception as HttpException).getResponse() as {
+        message: string;
+        code: string;
+        errors?: Array<any>;
+      };
+      return httpAdapter.reply(
+        ctx.getResponse(),
+        {
+          message: res.message,
+          code: (res.code ||= res.message),
+          statusCode: statusCode,
+          errors: (res.errors ||= null),
+        },
+        statusCode,
+      );
+    } catch (error) {
+      console.error(exception);
+      return httpAdapter.reply(
+        ctx.getResponse(),
+        {
+          message: isProduction
+            ? 'INTERNAL_SERVER_ERROR'
+            : (exception as Error).message + (exception as Error).stack,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
