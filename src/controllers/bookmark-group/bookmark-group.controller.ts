@@ -9,8 +9,9 @@ import {
   Post,
   SetMetadata,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/decorators/auth.decorator';
 import {
   BookmarkGroupCreateBatchDTO,
@@ -22,6 +23,7 @@ import {
 import { BookmarkGroup } from 'src/entity/BookmarkGroup';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { EntityPipe } from 'src/pipes';
 
 import { BookmarkGroupService } from 'src/services/bookmark-group-service';
 import { ResponseFactory } from 'src/shared/response-factory';
@@ -63,17 +65,22 @@ export class BookmarkGroupController {
   ): Promise<BookmarkGroupUpdateBatchResponse> {
     return this.bookmarkGroupService.updateEach(payload);
   }
-
+  @ApiParam({
+    type: 'number',
+    name: 'id',
+  })
   @Auth('admin', 'member')
   @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param(
+      'id',
+      new ParseIntPipe(),
+      new EntityPipe<BookmarkGroup>(BookmarkGroup),
+    )
+    entity: BookmarkGroup,
   ): Promise<BookmarkGroup> {
-    const record = await this.bookmarkGroupService.findOne(id);
-    if (record) {
-      return record;
-    }
-    ResponseFactory.notFound();
+    // do check something here if needed
+    return entity;
   }
 }
